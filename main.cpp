@@ -4,8 +4,8 @@
 #include <fstream>        // for reading from dictionary file
 
 // checklist :
-// 1. words are getting appended at the end of the dictionary
-// 2. able to read all the words from the dictionary
+// 1. words are getting appended at the end of the dictionary -> done
+// 2. able to read all the words from the dictionary -> done
 
 
 
@@ -75,7 +75,9 @@ void searchForWord(Tries* obj) {
     std::cin >> word;
 
     // printing all the matching words
-    obj->printAutoSuggestions(word);
+    if(!obj->printAutoSuggestions(word)) {
+        std::cout << "No result found\n";
+    }
 }
 
 
@@ -94,7 +96,8 @@ void addNewWord(Tries* obj) {
 
         //adding to the dictionary
         std::ofstream cout("dictionary.txt", std::ios::app);
-        std::cout << word;
+        cout << "\n" << word;
+        std::cout << "Added successfully\n";
     }
     else {
         std::cout << "Already present\n";
@@ -104,7 +107,7 @@ void addNewWord(Tries* obj) {
 // printing choices
 void printChoices() {
     std::cout << "What is your mood now?\n";
-    std::cout << "1. Add a new word to the dictionary\n";
+    std::cout << "1. Add a new word to the dictionary (lower case)\n";
     std::cout << "2. Search for a word match (lower case)\n";
     std::cout << "3. Clear entire search history (experimental)\n";
     std::cout << "4. Exit\n";
@@ -119,15 +122,19 @@ void clearScreen() {
 void buildTrie(Tries *obj) {
     // freopen("dictionary.txt", "r", stdin);
     // since freopen redirects the stdin to file
+    std::cout << "Opening file...\n";
     std::ifstream cin("dictionary.txt");
-
+    std::cout << "done\n\n";
     std::string word;
-
+    char words;
+    std::cout << "Reading words...\n";
     // input each word
-    while(std::cin >> word) {
+    while(std::getline(cin, word)) {
         // inserting each word
+        std::cout << word << "\n";
         obj->insert(word);
     }
+    std::cout << "\ndone !!!\n\n";
 }
 
 // print the welcome message
@@ -140,23 +147,37 @@ void welcomeMessage() {
 int main() {
     int choiceOperation;
     bool statusOfT = true;
+    char c;
 
     welcomeMessage();
+    std::this_thread::sleep_for (std::chrono::seconds(1));
+
     Tries *newTrie = new Tries;
     buildTrie(newTrie);
-    std::this_thread::sleep_for (std::chrono::seconds(2));
+    std::this_thread::sleep_for (std::chrono::seconds(1)); 
     // start 
     while(statusOfT) {
+
+        std::cout << "\nOperation completed successfully...     \nInput 1 to continue\nInput 0 to exit\n";
+        std::cin >> statusOfT;
+
         clearScreen();
         printChoices();
+
         std::cin >> choiceOperation;
+
+        clearScreen();
+
         switch(choiceOperation) {
             case 1: addNewWord(newTrie);
                 break;
+
             case 2: searchForWord(newTrie);
                 break;
+
             case 3: std::cout << "Under progress\n";
                 break;
+
             case 4:
                 statusOfT = false;
                 break;
