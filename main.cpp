@@ -82,7 +82,7 @@ void searchForWord(Tries* obj) {
 
 
 // adding a new word
-void addNewWord(Tries* obj) {
+void addNewWord(Tries* obj, std::string fileName) {
 
     //extra features : check for memory overflow (yet to be implemented)
 
@@ -95,7 +95,7 @@ void addNewWord(Tries* obj) {
         obj->insert(word);
 
         //adding to the dictionary
-        std::ofstream cout("dictionary.txt", std::ios::app);
+        std::ofstream cout(fileName, std::ios::app);
         cout << "\n" << word;
         std::cout << "Added successfully\n";
     }
@@ -119,11 +119,11 @@ void clearScreen() {
 }
 
 // reading the dictionary and building up the Trie
-void buildTrie(Tries *obj) {
+void buildTrie(Tries *obj, std::string fileName) {
     // freopen("dictionary.txt", "r", stdin);
     // since freopen redirects the stdin to file
     std::cout << "Opening file...\n";
-    std::ifstream cin("dictionary.txt");
+    std::ifstream cin(fileName);
     std::cout << "done\n\n";
     std::string word;
     char words;
@@ -152,8 +152,12 @@ int main() {
     welcomeMessage();
     std::this_thread::sleep_for (std::chrono::seconds(1));
 
+    std::string fileName;
+    std::cout << "Enter file name (with extension) :\n";
+    std::cin >> fileName;
+
     Tries *newTrie = new Tries;
-    buildTrie(newTrie);
+    buildTrie(newTrie, fileName);
     std::this_thread::sleep_for (std::chrono::seconds(1)); 
     // start 
     while(statusOfT) {
@@ -169,7 +173,7 @@ int main() {
         clearScreen();
 
         switch(choiceOperation) {
-            case 1: addNewWord(newTrie);
+            case 1: addNewWord(newTrie, fileName);
                 break;
 
             case 2: searchForWord(newTrie);
