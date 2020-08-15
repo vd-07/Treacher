@@ -11,7 +11,7 @@
   - Autocomplete : O(max_word_length)
 - Space complexity : O(no_of_words * max_word_length)
 ## Features yet to be implemented
-1. ~~Added support for searching in original file~~
+1. ~~Added support for searching in external file~~
 2. Adding GUI
 3. Serve autocomplete results based on top 5 hits in descending order
 4. Take input continuously 
